@@ -2,7 +2,7 @@
 
 import sys
 from datetime import datetime, timedelta, date, time
-
+'''
 def season(x):
 	winter1 = datetime(2015,12,22,0,0)
 	nye = datetime(2015,12,31,23,59)
@@ -23,7 +23,7 @@ def season(x):
 	elif autumn1 <= x <= autumn2:
 		season = 'Autumn'
 	return season
-
+'''
 # input comes from STDIN (stream data that goes to the program)
 for line in sys.stdin:
 	
@@ -82,8 +82,8 @@ for line in sys.stdin:
 		PCPXX = line[30]
 		snow_depth = line[31]
 
-		print 'p,%s,%s,%s\t%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s' %(key.month,key,season(key), direction,speed,gust,cloud_ceiling,sky_cover,low_cloud,middle_cloud,high_cloud,visibility,temp,dewpoint,sea_level_pressure,altimeter,station_pressure,max_temp,min_temp,PCP01,PCP06,PCP24,PCPXX,snow_depth)
-		print 'd,%s,%s,%s\t%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s' %(key.month,key,season(key), direction,speed,gust,cloud_ceiling,sky_cover,low_cloud,middle_cloud,high_cloud,visibility,temp,dewpoint,sea_level_pressure,altimeter,station_pressure,max_temp,min_temp,PCP01,PCP06,PCP24,PCPXX,snow_depth)
+		print 'p,%s,%s\t%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s' %(key.month,key, direction,speed,gust,cloud_ceiling,sky_cover,low_cloud,middle_cloud,high_cloud,visibility,temp,dewpoint,sea_level_pressure,altimeter,station_pressure,max_temp,min_temp,PCP01,PCP06,PCP24,PCPXX,snow_depth)
+		print 'd,%s,%s\t%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s' %(key.month,key, direction,speed,gust,cloud_ceiling,sky_cover,low_cloud,middle_cloud,high_cloud,visibility,temp,dewpoint,sea_level_pressure,altimeter,station_pressure,max_temp,min_temp,PCP01,PCP06,PCP24,PCPXX,snow_depth)
 	elif len(line) == 19:
 		
 		key = []
@@ -124,5 +124,5 @@ for line in sys.stdin:
 		improvement_surcharge = line[17]
 		total_amount = line[18]
 
-		print "p,%s,%s,%s\t%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s" %(key1.month,key1,season(key1), pickup_longitude,pickup_latitude,passenger_count,trip_distance,fare_amount,extra,mta_tax,tip_amount,tolls_amount,improvement_surcharge,total_amount)
-		print "d,%s,%s,%s\t%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s" %(key2.month,key2,season(key2), dropoff_longitude,dropoff_latitude,passenger_count,trip_distance,fare_amount,extra,mta_tax,tip_amount,tolls_amount,improvement_surcharge,total_amount)
+		print "p,%s,%s\t%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s" %(key1.month,key1, pickup_longitude,pickup_latitude,passenger_count,trip_distance,fare_amount,extra,mta_tax,tip_amount,tolls_amount,improvement_surcharge,total_amount)
+		print "d,%s,%s\t%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s" %(key2.month,key2, dropoff_longitude,dropoff_latitude,passenger_count,trip_distance,fare_amount,extra,mta_tax,tip_amount,tolls_amount,improvement_surcharge,total_amount)

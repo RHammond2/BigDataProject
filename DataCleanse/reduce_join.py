@@ -3,6 +3,7 @@
 import sys
 
 key = None
+k = None
 weather = []
 trips = []
 
@@ -13,7 +14,7 @@ for line in sys.stdin:
 	v = components[1]
 
 	if key == k:
-		if len(v.strip().split(',')) == 22:
+		if len(v.strip().split(',')) == 21:
 			weather.append(v)
 		else:
 			trips.append(v)
@@ -29,10 +30,11 @@ for line in sys.stdin:
 
 		key = k
 
-		if len(v.strip().split(',')) == 22:
+		if len(v.strip().split(',')) == 21:
 			weather.append(v)
 		else:
 			trips.append(v)
+
 if k == key:
 	for w in weather:
 		for t in trips:
