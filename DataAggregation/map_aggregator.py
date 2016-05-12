@@ -9,28 +9,34 @@ for line in sys.stdin:
 
 	k = line[0]
 	v = line[1]
-
-	values = v.strip().split(",")
 	
-	speed = values[3]
-	gust = values[4]
-	visibility = values[11]
-	temp = values[12]
-	dewpoint = values[13]
-	PCP01 = values[19]
-	PCP06 = values[20]
-	PCP24 = values[21]
-	snow = values[22]
-	passenger_count = values[25]
-	trip_distance = values[26]
-	fare_amount = values[27]
-	extra = values[28]
-	mta_tax = values [29]
-	tip_amount = values[30]
-	tolls_amount = values[31]
-	improvement_surcharge = values[32]
-	total_amount = values[33]
+	v = v.strip().split(",")
 
+	#key.month,key,season(key), direction,speed,gust,cloud_ceiling,sky_cover,low_cloud,middle_cloud,high_cloud, 8
+	#visibility,temp,dewpoint,sea_level_pressure,altimeter,station_pressure,max_temp,min_temp,PCP01,PCP06,PCP24,PCPXX,snow_depth 13	
+	#pickup_longitude,pickup_latitude, 2
+	#passenger_count,trip_distance,fare_amount,extra,mta_tax,tip_amount,tolls_amount,improvement_surcharge,total_amount
+	
+	speed = v[1]
+	gust = v[2]
+	visibility = v[9]
+	temp = v[10]
+	dewpoint = v[11]
+	PCP01 = v[17]
+	PCP06 = v[18]
+	PCP24 = v[19]
+	snow = v[20]
+	passenger_count = v[23]
+	trip_distance = v[24]
+	fare_amount = v[25]
+	extra = v[26]
+	mta_tax = v [27]
+	tip_amount = v[28]
+	tolls_amount = v[29]
+	improvement_surcharge = v[30]
+	total_amount = v[31]
+	
 	print "%s\t%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,1" \
 		%(k, speed,gust,visibility,temp,dewpoint,PCP01,PCP06,PCP24,snow,passenger_count, \
 		trip_distance,fare_amount,extra,mta_tax,tip_amount,tolls_amount,improvement_surcharge,total_amount)
+	

@@ -13,7 +13,7 @@ for line in sys.stdin:
 	v = components[1]
 
 	if key == k:
-		if len(v.strip().split(',')) == 23:
+		if len(v.strip().split(',')) == 22:
 			weather.append(v)
 		else:
 			trips.append(v)
@@ -29,7 +29,7 @@ for line in sys.stdin:
 
 		key = k
 
-		if len(v.strip().split(',')) == 23:
+		if len(v.strip().split(',')) == 22:
 			weather.append(v)
 		else:
 			trips.append(v)
