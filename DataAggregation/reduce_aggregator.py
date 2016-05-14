@@ -51,5 +51,6 @@ for line in sys.stdin:
 
 keylist = sorted(aggregates.keys())
 for k in keylist:
-	print k, ",".join([str(x) for x in aggregates[k]])
+	#print '%s,%s' %(k,aggregates[k])
+	print k,",", ",".join([str(x) for x in aggregates[k]])
 	

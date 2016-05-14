@@ -8,6 +8,10 @@ for line in sys.stdin:
 	line = line.strip().split('\t')
 
 	k = line[0]
+
+	if 'p_d_status,month' in k:
+		continue
+
 	v = line[1]
 	
 	v = v.strip().split(",")
