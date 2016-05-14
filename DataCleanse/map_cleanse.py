@@ -30,7 +30,7 @@ for line in sys.stdin:
 			l = float(l)
 		except ValueError:
 			l = l
-		if l < "0":
+		if l < 0:
 			i .append(0)
 		i.append(1)
 	if '0' in i:
