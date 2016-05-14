@@ -114,19 +114,3 @@ def merged_images(x_range, y_range, w, h, how='log'):
 
 p = base_plot()
 InteractiveImage(p, merged_images)
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
-
