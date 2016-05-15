@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<style>
+  body {
+    font: 11px sans-serif;
+  }
+  .axis path,
+  .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
+  .dot {
+    stroke: #000;
+  }
+  .tooltip {
+    position: absolute;
+    width: 200px;
+    height: 28px;
+    pointer-events: none;
+  }
+</style>
+
+<body>
+<div class="ui">
+  <div>
+    <label>X-Axis</label>
+    <select id="sel-x">
+     <option value="gust">gust</option>
+	 
+   </select>
+   <label>Y-Axis</label>
+   <select id="sel-y">
+     <option value="avgPickupsCount">avgPickupsCount</option>
+     <option value="avgExtra">avgExtra</option>
+	 <option value="avgFareAmt">avgFareAmt</option>
+	 <option value="avgImprovementSurcharge">avgImprovementSurcharge</option>
+	 <option value="avgMtaTax">avgMtaTax</option>
+	 <option value="avgPassengerCount">avgPassengerCount</option>
+	 <option value="avgTipAmt">avgTipAmt</option>
+	 <option value="avgTollsAmt">avgTollsAmt</option>
+	 <option value="avgTotalamt">avgTotalamt</option>
+	 <option value="avgTripDist">avgTripDist</option>
+   </select>
+  </div>
+  <div>
+	<label>Season</label>
+    <select id="season_sel">
+     <option value="Autumn">Autumn</option>
+	 <option value="Spring">Spring</option>
+	 <option value="Summer">Summer</option>
+	 <option value="Winter">Winter</option>
+	 </select>
+    <button id="update" onclick="plot()">Query gust</button>
+  </div> 
+ <B>Autumn=Yellow, Spring=Green, Summer=Red, Winter=Blue
+<!--<script src="http://d3js.org/d3.v3.min.js"></script>-->
+<script src="bower_components/d3/d3.min.js"></script>
+<script>
+var margin = {top: 30, right: 20, bottom: 30, left: 40},
+    width = 300 - margin.left - margin.right,
+    height = 300 - margin.top - margin.bottom;
+var opt_x = "gust"
+var opt_y = "avgPickupsCount"
+var color = d3.scale.category10();
+// setup x 
+var xValue = function(d) { 
+    var sel=document.getElementById("sel-x");
+    var opt=sel.options[sel.selectedIndex].text;
+    return d.gust
+      }, // data -> value
+    xScale = d3.scale.linear().range([0, width]), // value -> display
+    xMap = function(d) { return xScale(xValue(d));}, // data -> display
+    xAxis = d3.svg.axis().scale(xScale).orient("bottom");
+// setup y
+var yValue = function(d) {
+    var sel=document.getElementById("sel-y");
+    var opt=sel.options[sel.selectedIndex].text;
+    if(opt=="avgPickupsCount")
+      return d.avgPickupsCount;
+    else if(opt=="avgExtra")
+      return d.avgExtra;
+    else if(opt=="avgFareAmt")
+      return d.avgFareAmt;
+    else if(opt=="avgImprovementSurcharge")
+      return d.avgImprovementSurcharge;
+    else if(opt=="avgMtaTax")
+      return d.avgMtaTax;
+    else if(opt=="avgPassengerCount")
+      return d.avgPassengerCount;
+	else if(opt=="avgTipAmt")
+      return d.avgTipAmt;
+	else if(opt=="avgTollsAmt")
+      return d.avgTollsAmt;
+	else if(opt=="avgTotalamt")
+      return d.avgTotalamt;
+    else
+      return d.avgTripDist
+      }, // data -> value
+    yScale = d3.scale.linear().range([height, 0]), // value -> display
+    yMap = function(d) { return yScale(yValue(d));}, // data -> display
+    yAxis = d3.svg.axis().scale(yScale).orient("left");
+// add the graph canvas to the body of the webpage
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+var text = svg.append("text")
+    .attr("x", (width / 2))             
+    .attr("y", 0 - (margin.top / 2))
+    .attr("text-anchor", "middle")  
+    .style("font-size", "14px")
+    .style("font-weight", "bold")
+    .text(opt_x.concat(" vs. ").concat(opt_y))
+// load data
+d3.csv("GustPlots.csv", function(error, data) {
+  // change string (from CSV) into number format
+  data.forEach(function(d) {
+    d.gust = +d.gust;
+	d.avgPickupsCount = +d.avgPickupsCount;
+    d.avgExtra = +d.avgExtra;
+	d.avgFareAmt = +d.avgFareAmt;
+	d.avgImprovementSurcharge = +d.avgImprovementSurcharge;
+	d.avgMtaTax = +d.avgMtaTax;
+	d.avgPassengerCount = +d.avgPassengerCount;
+	d.avgTipAmt = +d.avgTipAmt;
+	d.avgTollsAmt = +d.avgTollsAmt;
+	d.avgTotalamt = +d.avgTotalamt;
+	d.avgTripDist = +d.avgTripDist;
+	
+//    console.log(d);
+});
+  // don't want dots overlapping axis, so add in buffer to data domain
+  xScale.domain([d3.min(data, xValue)-10, d3.max(data, xValue)+10]);
+  yScale.domain([d3.min(data, yValue)-10, d3.max(data, yValue)+10]);
+  
+  // x-axis
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis)
+    .append("text")
+      .attr("class", "label")
+      .attr("x", width)
+      .attr("y", -6)
+      .style("text-anchor", "end")
+      .text(opt_x);
+  // y-axis
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("class", "label")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text(opt_y);
+  // draw dots
+  svg.selectAll(".dot")
+      .data(data)
+    .enter().append("circle")
+      .attr("class", "dot")
+      .attr("r", 3)
+      .attr("cx", xMap)
+      .attr("cy", yMap)
+      .style("fill", function(d) { return color(d.season); })  
+      .on("mouseover", function(d) {
+          d3.select('text').text (d["name"] );
+          
+      })
+      .on("mouseout", function(d) {
+          d3.select('text').text(opt_x.concat(" vs. ").concat(opt_y));
+      });
+});
+function plot() {
+  d3.select("svg").remove();
+  var margin = {top: 30, right: 20, bottom: 30, left: 40},
+      width = 300 - margin.left - margin.right,
+      height = 300 - margin.top - margin.bottom;
+  var sel=document.getElementById("sel-x");
+  var opt_x=sel.options[sel.selectedIndex].text;
+  var sel=document.getElementById("sel-y");
+  var opt_y=sel.options[sel.selectedIndex].text;
+  // setup x 
+  var xValue = function(d) { 
+      var sel=document.getElementById("sel-x");
+      var opt=sel.options[sel.selectedIndex].text;
+      return d.gust},
+       // data -> value
+      xScale = d3.scale.linear().range([0, width]), // value -> display
+      xMap = function(d) {
+          return xScale(xValue(d));}, // data -> display
+      xAxis = d3.svg.axis().scale(xScale).orient("bottom");
+  // setup y
+  var yValue = function(d) {
+      var sel=document.getElementById("sel-y");
+      var opt=sel.options[sel.selectedIndex].text;
+    if(opt=="avgPickupsCount")
+      return d.avgPickupsCount;
+    else if(opt=="avgExtra")
+      return d.avgExtra;
+    else if(opt=="avgFareAmt")
+      return d.avgFareAmt;
+    else if(opt=="avgImprovementSurcharge")
+      return d.avgImprovementSurcharge;
+    else if(opt=="avgMtaTax")
+      return d.avgMtaTax;
+    else if(opt=="avgPassengerCount")
+      return d.avgPassengerCount;
+	else if(opt=="avgTipAmt")
+      return d.avgTipAmt;
+	else if(opt=="avgTollsAmt")
+      return d.avgTollsAmt;
+	else if(opt=="avgTotalamt")
+      return d.avgTotalamt;
+    else
+      return d.avgTripDist}, // data -> value
+      yScale = d3.scale.linear().range([height, 0]), // value -> display
+      yMap = function(d) { 
+          return yScale(yValue(d));},
+       // data -> display
+      yAxis = d3.svg.axis().scale(yScale).orient("left");
+  // add the graph canvas to the body of the webpage
+  var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  var text = svg.append("text")
+    .attr("x", (width / 2))             
+    .attr("y", 0 - (margin.top / 2))
+    .attr("text-anchor", "middle")  
+    .style("font-size", "14px")
+    .style("font-weight", "bold")
+    .text(opt_x.concat(" vs. ").concat(opt_y))
+  // load data
+  d3.csv("gustPlots.csv", function(error, data) {
+    // change string (from CSV) into number format
+    data.forEach(function(d) {
+    d.gust = +d.gust;
+	d.avgPickupsCount = +d.avgPickupsCount;
+    d.avgExtra = +d.avgExtra;
+	d.avgFareAmt = +d.avgFareAmt;
+	d.avgImprovementSurcharge = +d.avgImprovementSurcharge;
+	d.avgMtaTax = +d.avgMtaTax;
+	d.avgPassengerCount = +d.avgPassengerCount;
+	d.avgTipAmt = +d.avgTipAmt;
+	d.avgTollsAmt = +d.avgTollsAmt;
+	d.avgTotalamt = +d.avgTotalamt;
+	d.avgTripDist = +d.avgTripDist;
+  //    console.log(d);
+  });
+    // don't want dots overlapping axis, so add in buffer to data domain
+    xScale.domain([d3.min(data, xValue)-10, d3.max(data, xValue)+10]);
+    yScale.domain([d3.min(data, yValue)-10, d3.max(data, yValue)+10]);
+ 
+    // x-axis
+    svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis)
+      .append("text")
+      .attr("class", "label")
+      .attr("x", width)
+      .attr("y", -6)
+      .style("text-anchor", "end")
+      .text(opt_x);
+    // y-axis
+    svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+      .append("text")
+      .attr("class", "label")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text(opt_y);
+    // draw dots
+    svg.selectAll(".dot")
+      .data(data)
+      .enter().append("circle")
+      .attr("class", "dot")
+      .attr("r", 3)
+      .attr("cx", xMap)
+      .attr("cy", yMap)
+      .style("fill", function(d) { return color(d.season); }) 
+      .on("mouseover", function(d) {
+          d3.select('text').text (d["name"] );
+          
+      })
+      .on("mouseout", function(d) {
+          d3.select('text').text(opt_x.concat(" vs. ").concat(opt_y));
+      });
+  });
+}
+</script>
+</body>
+</html>
